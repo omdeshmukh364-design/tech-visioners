@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civic Issue Reporting System - India</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="https://via.placeholder.com/40" alt="Logo">
+                <span>Civic Report India</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="#stats">Statistics</a>
+                <a href="#contact">Contact</a>
+                <button class="btn-primary" onclick="showLoginModal()">Login/Register</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Report Civic Issues, Build Better Communities</h1>
+            <p>Join thousands of citizens making Indian cities better, one issue at a time</p>
+            <div class="hero-buttons">
+                <button class="btn-large" onclick="showReportModal()">Report an Issue</button>
+                <button class="btn-large-outline" onclick="showPublicDashboard()">View Public Issues</button>
+            </div>
+            <div class="language-selector">
+                <select id="language">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="ta">தமிழ்</option>
+                    <option value="te">తెలుగు</option>
+                    <option value="mr">मराठी</option>
+                    <option value="gu">ગુજરાતી</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login/Registration Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('authModal')">&times;</span>
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+                    <button class="tab-btn" onclick="switchTab('register')">Register</button>
+                    <button class="tab-btn" onclick="switchTab('official')">Official Login</button>
+                </div>
+
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-form active">
+                    <h2>Welcome Back!</h2>
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <input type="text" id="loginPhone" placeholder="Phone/Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="loginPassword" placeholder="Password" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Login</button>
+                        <div class="social-login">
+                            <p>Or login with</p>
+                            <div class="social-buttons">
+                                <button type="button" class="social-btn google">Google</button>
+                                <button type="button" class="social-btn facebook">Facebook</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Registration Form -->
+                <div id="registerForm" class="auth-form">
+                    <h2>Create Account</h2>
+                    <form onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <input type="text" id="regName" placeholder="Full Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" id="regPhone" placeholder="Phone Number" pattern="[0-9]{10}" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="regEmail" placeholder="Email Address" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="regPassword" placeholder="Password" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="regAadhaar" placeholder="Aadhaar Number (Optional)" pattern="[0-9]{12}">
+                        </div>
+                        <div class="form-group">
+                            <select id="regState" required>
+                                <option value="">Select State</option>
+                                <option value="MH">Maharashtra</option>
+                                <option value="DL">Delhi</option>
+                                <option value="KA">Karnataka</option>
+                                <option value="TN">Tamil Nadu</option>
+                                <option value="GJ">Gujarat</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="regCity" placeholder="City" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="regPincode" placeholder="Pincode" pattern="[0-9]{6}" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Register</button>
+                    </form>
+                </div>
+
+                <!-- Official Login Form -->
+                <div id="officialForm" class="auth-form">
+                    <h2>Government Official Login</h2>
+                    <form onsubmit="handleOfficialLogin(event)">
+                        <div class="form-group">
+                            <input type="text" id="officialId" placeholder="Official ID" required>
+                        </div>
+                        <div class="form-group">
+                            <select id="department" required>
+                                <option value="">Select Department</option>
+                                <option value="municipal">Municipal Corporation</option>
+                                <option value="pwd">Public Works Department</option>
+                                <option value="electricity">Electricity Board</option>
+                                <option value="water">Water Board</option>
+                                <option value="transport">Transport Department</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="officialPassword" placeholder="Password" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Official Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Report Modal -->
+    <div id="quickReportModal" class="modal">
+        <div class="modal-content large">
+            <span class="close" onclick="closeModal('quickReportModal')">&times;</span>
+            <h2>Quick Issue Report</h2>
+            <form id="quickReportForm" onsubmit="submitQuickReport(event)">
+                <div class="form-steps">
+                    <!-- Step 1: Category Selection -->
+                    <div class="step active" id="step1">
+                        <h3>Select Issue Category</h3>
+                        <div class="category-grid">
+                            <div class="category-card" onclick="selectCategory('infrastructure')">
+                                <span class="icon">🏗️</span>
+                                <h4>Infrastructure</h4>
+                                <p>Roads, Bridges, Buildings</p>
+                            </div>
+                            <div class="category-card" onclick="selectCategory('utilities')">
+                                <span class="icon">💡</span>
+                                <h4>Utilities</h4>
+                                <p>Water, Electricity, Gas</p>
+                            </div>
+                            <div class="category-card" onclick="selectCategory('environment')">
+                                <span class="icon">🌳</span>
+                                <h4>Environment</h4>
+                                <p>Pollution, Waste, Parks</p>
+                            </div>
+                            <div class="category-card" onclick="selectCategory('safety')">
+                                <span class="icon">🚦</span>
+                                <h4>Public Safety</h4>
+                                <p>Street Lights, Traffic</p>
+                            </div>
+                            <div class="category-card" onclick="selectCategory('social')">
+                                <span class="icon">🏥</span>
+                                <h4>Social Services</h4>
+                                <p>Healthcare, Education</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Issue Details -->
+                    <div class="step" id="step2">
+                        <h3>Provide Issue Details</h3>
+                        <div class="form-group">
+                            <label>Issue Title</label>
+                            <input type="text" id="issueTitle" placeholder="Brief title of the issue" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="issueDescription" rows="4" placeholder="Describe the issue in detail" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Upload Photos/Videos</label>
+                            <input type="file" id="issueMedia" multiple accept="image/*,video/*">
+                            <div id="mediaPreview" class="media-preview"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Urgency Level</label>
+                            <select id="urgencyLevel" required>
+                                <option value="low">Low - Can wait</option>
+                                <option value="medium">Medium - Should be addressed soon</option>
+                                <option value="high">High - Urgent attention needed</option>
+                                <option value="critical">Critical - Immediate action required</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Location -->
+                    <div class="step" id="step3">
+                        <h3>Specify Location</h3>
+                        <div class="location-options">
+                            <button type="button" class="btn-secondary" onclick="getCurrentLocation()">
+                                📍 Use Current Location
+                            </button>
+                            <p>OR</p>
+                            <div class="form-group">
+                                <label>Enter Address Manually</label>
+                                <input type="text" id="manualAddress" placeholder="Street address, landmark">
+                                <input type="text" id="area" placeholder="Area/Locality">
+                                <input type="text" id="cityLocation" placeholder="City">
+                                <input type="text" id="pincodeLocation" placeholder="Pincode" pattern="[0-9]{6}">
+                            </div>
+                        </div>
+                        <div id="mapContainer" class="map-container"></div>
+                    </div>
+
+                    <!-- Step Navigation -->
+                    <div class="step-navigation">
+                        <button type="button" class="btn-secondary" onclick="previousStep()" id="prevBtn" style="display:none">Previous</button>
+                        <button type="button" class="btn-primary" onclick="nextStep()" id="nextBtn">Next</button>
+                        <button type="submit" class="btn-primary" id="submitBtn" style="display:none">Submit Report</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <section id="stats" class="statistics">
+        <div class="container">
+            <h2>Real-Time Impact</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>15,234</h3>
+                    <p>Issues Reported</p>
+                </div>
+                <div class="stat-card">
+                    <h3>12,456</h3>
+                    <p>Issues Resolved</p>
+                </div>
+                <div class="stat-card">
+                    <h3>81.7%</h3>
+                    <p>Resolution Rate</p>
+                </div>
+                <div class="stat-card">
+                    <h3>48 hrs</h3>
+                    <p>Avg Resolution Time</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/app.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
